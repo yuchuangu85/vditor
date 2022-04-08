@@ -4,6 +4,7 @@ import { merge } from "./merge";
 export class Options {
     public options: IOptions;
     private defaultOptions: IOptions = {
+        rtl: false,
         after: undefined,
         cache: {
             enable: true,
@@ -148,6 +149,10 @@ export class Options {
             if (this.options.comment) {
                 this.defaultOptions.comment = this.options.comment;
             }
+            // 支持不够完善，我先注释了，后期再打开
+            // if (this.options.rtl) {
+            //     this.defaultOptions.rtl = this.options.rtl;
+            // }
         }
 
         const mergedOptions = merge(this.defaultOptions, this.options);

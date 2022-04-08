@@ -588,14 +588,18 @@ export const highlightToolbarWYSIWYG = (vditor: IVditor) => {
             setPopoverPosition(vditor, footnotesRefElement);
         }
 
-        let blockRenderElement = hasClosestByClassName(typeElement, "vditor-wysiwyg__block") as HTMLElement;
         // block popover: math-inline, math-block, html-block, html-inline, code-block, html-entity
-        if (
-            blockRenderElement &&
-            blockRenderElement.getAttribute("data-type").indexOf("block") > -1
-        ) {
-            const lang: keyof II18n | "" = vditor.options.lang;
-            const options: IOptions = vditor.options;
+        let blockRenderElement = hasClosestByClassName(typeElement, "vditor-wysiwyg__block") as HTMLElement;
+        const isBlock = blockRenderElement ? blockRenderElement.getAttribute("data-type").indexOf("block") > -1 : false;
+        vditor.wysiwyg.element
+            .querySelectorAll(".vditor-wysiwyg__preview")
+            .forEach((itemElement) => {
+                if (!blockRenderElement || (blockRenderElement && isBlock && !blockRenderElement.contains(itemElement))) {
+                    const previousElement = itemElement.previousElementSibling as HTMLElement;
+                    previousElement.style.display = "none";
+                }
+            });
+        if (blockRenderElement && isBlock) {
             vditor.wysiwyg.popover.innerHTML = "";
             genUp(range, blockRenderElement, vditor);
             genDown(range, blockRenderElement, vditor);
@@ -694,17 +698,8 @@ export const highlightToolbarWYSIWYG = (vditor: IVditor) => {
             }
             setPopoverPosition(vditor, blockRenderElement);
         } else {
-            if (!blockRenderElement) {
-                vditor.wysiwyg.element
-                    .querySelectorAll(".vditor-wysiwyg__preview")
-                    .forEach((itemElement) => {
-                        const previousElement = itemElement.previousElementSibling as HTMLElement;
-                        previousElement.style.display = "none";
-                    });
-            }
             blockRenderElement = undefined;
         }
-
         if (headingElement) {
             vditor.wysiwyg.popover.innerHTML = "";
 
@@ -972,8 +967,6 @@ const linkHotkey = (
 };
 
 export const genAPopover = (vditor: IVditor, aElement: HTMLElement) => {
-    const lang: keyof II18n | "" = vditor.options.lang;
-    const options: IOptions = vditor.options;
     vditor.wysiwyg.popover.innerHTML = "";
 
     const updateA = () => {
@@ -982,6 +975,7 @@ export const genAPopover = (vditor: IVditor, aElement: HTMLElement) => {
         }
         aElement.setAttribute("href", input1.value);
         aElement.setAttribute("title", input2.value);
+        afterRenderEvent(vditor);
     };
 
     aElement.querySelectorAll("[data-marker]").forEach((item: HTMLElement) => {

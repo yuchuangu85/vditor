@@ -166,7 +166,7 @@ const vditor = new Vditor(id, {options...})
 
 #### 内容主题
 
-Markdown 输出的 HTML 所展现的外观。内置 light，dark，wechat 3 套主题。支持内容主题扩展接口。
+Markdown 输出的 HTML 所展现的外观。内置 ant-design, light，dark，wechat 4 套主题。支持内容主题扩展接口。
 
 * 需在显示元素上添加 `class="vditor-reset"`
 * 编辑器初始化时可通过 `options.preview.theme` 设置内置或自己开发的主题列表
@@ -194,6 +194,7 @@ Markdown 输出的 HTML 所展现的外观。内置 light，dark，wechat 3 套�
 |   | 说明 | 默认值 |
 | - | - | - |
 | i18n | 多语言，参见 ITips | - |
+| rtl | 支持 RTL 模式，对阿拉伯等文字进行支持优化 | false |
 | undoDelay | 历史记录间隔 | - |
 | after | 编辑器异步渲染完成后的回调方法 | - |
 | height | 编辑器总高度 | 'auto' |
@@ -327,7 +328,7 @@ new Vditor('vditor', {
 |   | 说明 | 默认值 |
 | - | - | - |
 | current | 当前主题 | "light" |
-| list | 可选主题列表 | { dark: "Dark", light: "Light", wechat: "WeChat" } |
+| list | 可选主题列表 | { "ant-design": "Ant Design", dark: "Dark", light: "Light", wechat: "WeChat" } |
 | path | 主题样式地址 | `https://cdn.jsdelivr.net/npm/vditor@${VDITOR_VERSION}/dist/css/content-theme` |
 
 #### options.preview.math
