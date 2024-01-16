@@ -6,6 +6,8 @@ import {hasClosestByTag} from "../util/hasClosestByHeadings";
 import {log} from "../util/log";
 import {getEditorRange, setRangeByWbr} from "../util/selection";
 import {inputEvent} from "./inputEvent";
+import {combineFootnote} from "./combineFootnote";
+
 
 export const processPaste = (vditor: IVditor, text: string) => {
     const range = getEditorRange(vditor);
@@ -16,14 +18,16 @@ export const processPaste = (vditor: IVditor, text: string) => {
     if (!blockElement) {
         blockElement = vditor.sv.element;
     }
-    const html = "<div data-block='0'>" +
-        vditor.lute.Md2VditorSVDOM(blockElement.textContent).replace(/<span data-type="newline"><br \/><span style="display: none">\n<\/span><\/span><span data-type="newline"><br \/><span style="display: none">\n<\/span><\/span></g, '<span data-type="newline"><br /><span style="display: none">\n</span></span><span data-type="newline"><br /><span style="display: none">\n</span></span></div><div data-block="0"><') +
+    let spinHTML = vditor.lute.SpinVditorSVDOM(blockElement.textContent)
+    spinHTML = "<div data-block='0'>" +
+        spinHTML.replace(/<span data-type="newline"><br \/><span style="display: none">\n<\/span><\/span><span data-type="newline"><br \/><span style="display: none">\n<\/span><\/span></g, '<span data-type="newline"><br /><span style="display: none">\n</span></span><span data-type="newline"><br /><span style="display: none">\n</span></span></div><div data-block="0"><') +
         "</div>";
     if (blockElement.isEqualNode(vditor.sv.element)) {
-        blockElement.innerHTML = html;
+        blockElement.innerHTML = spinHTML;
     } else {
-        blockElement.outerHTML = html;
+        blockElement.outerHTML = spinHTML;
     }
+    combineFootnote(vditor.sv.element)
     setRangeByWbr(vditor.sv.element, range);
 
     scrollCenter(vditor);
@@ -49,8 +53,9 @@ export const getSideByType = (spanNode: Node, type: string, isPrevious = true) =
 
 export const processSpinVditorSVDOM = (html: string, vditor: IVditor) => {
     log("SpinVditorSVDOM", html, "argument", vditor.options.debugger);
+    const spinHTML = vditor.lute.SpinVditorSVDOM(html)
     html = "<div data-block='0'>" +
-        vditor.lute.SpinVditorSVDOM(html).replace(/<span data-type="newline"><br \/><span style="display: none">\n<\/span><\/span><span data-type="newline"><br \/><span style="display: none">\n<\/span><\/span></g, '<span data-type="newline"><br /><span style="display: none">\n</span></span><span data-type="newline"><br /><span style="display: none">\n</span></span></div><div data-block="0"><') +
+        spinHTML.replace(/<span data-type="newline"><br \/><span style="display: none">\n<\/span><\/span><span data-type="newline"><br \/><span style="display: none">\n<\/span><\/span></g, '<span data-type="newline"><br /><span style="display: none">\n</span></span><span data-type="newline"><br /><span style="display: none">\n</span></span></div><div data-block="0"><') +
         "</div>";
     log("SpinVditorSVDOM", html, "result", vditor.options.debugger);
     return html;

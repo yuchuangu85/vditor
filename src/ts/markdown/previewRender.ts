@@ -14,6 +14,7 @@ import {lazyLoadImageRender} from "./lazyLoadImageRender";
 import {mathRender} from "./mathRender";
 import {mediaRender} from "./mediaRender";
 import {mermaidRender} from "./mermaidRender";
+import {markmapRender} from "../markdown/markmapRender";
 import {mindmapRender} from "./mindmapRender";
 import {plantumlRender} from "./plantumlRender";
 import {setLute} from "./setLute";
@@ -24,9 +25,7 @@ const mergeOptions = (options?: IPreviewOptions) => {
         anchor: 0,
         cdn: Constants.CDN,
         customEmoji: {},
-        emojiPath: `${
-            (options && options.emojiPath) || Constants.CDN
-        }/dist/images/emoji`,
+        emojiPath: `${Constants.CDN}/dist/images/emoji`,
         hljs: Constants.HLJS_OPTIONS,
         icon: "ant",
         lang: "zh_CN",
@@ -38,6 +37,14 @@ const mergeOptions = (options?: IPreviewOptions) => {
         },
         theme: Constants.THEME_OPTIONS,
     };
+    if (options.cdn) {
+        if (!options.theme?.path) {
+            defaultOption.theme.path = `${options.cdn}/dist/css/content-theme`
+        }
+        if (!options.emojiPath) {
+            defaultOption.emojiPath = `${options.cdn}/dist/images/emoji`;
+        }
+    }
     return merge(defaultOption, options);
 };
 
@@ -46,6 +53,7 @@ export const md2html = (mdText: string, options?: IPreviewOptions) => {
     return addScript(`${mergedOptions.cdn}/dist/js/lute/lute.min.js`, "vditorLuteScript").then(() => {
         const lute = setLute({
             autoSpace: mergedOptions.markdown.autoSpace,
+            gfmAutoLink: mergedOptions.markdown.gfmAutoLink,
             codeBlockPreview: mergedOptions.markdown.codeBlockPreview,
             emojiSite: mergedOptions.emojiPath,
             emojis: mergedOptions.customEmoji,
@@ -85,7 +93,7 @@ export const previewRender = async (previewElement: HTMLDivElement, markdown: st
     previewElement.classList.add("vditor-reset");
 
     if (!mergedOptions.i18n) {
-        if (!["en_US", "ja_JP", "ko_KR", "ru_RU", "zh_CN", "zh_TW"].includes(mergedOptions.lang)) {
+        if (!["en_US", "fr_FR", "pt_BR", "ja_JP", "ko_KR", "ru_RU", "sv_SE", "zh_CN", "zh_TW"].includes(mergedOptions.lang)) {
             throw new Error(
                 "options.lang error, see https://ld246.com/article/1549638745630#options",
             );
@@ -118,6 +126,7 @@ export const previewRender = async (previewElement: HTMLDivElement, markdown: st
         math: mergedOptions.math,
     });
     mermaidRender(previewElement, mergedOptions.cdn, mergedOptions.mode);
+    markmapRender(previewElement, mergedOptions.cdn, mergedOptions.mode);
     flowchartRender(previewElement, mergedOptions.cdn);
     graphvizRender(previewElement, mergedOptions.cdn);
     chartRender(previewElement, mergedOptions.cdn, mergedOptions.mode);

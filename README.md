@@ -54,7 +54,7 @@ Vditor 在这些方面做了努力，希望能为现代化的通用 Markdown 编
 
 * 支持三种编辑模式：所见即所得（wysiwyg）、即时渲染（ir）、分屏预览（sv）
 * 支持大纲、数学公式、脑图、图表、流程图、甘特图、时序图、五线谱、[多媒体](https://ld246.com/article/1589813914768)、语音阅读、标题锚点、代码高亮及复制、graphviz 渲染、[plantuml](https://plantuml.com)UML图
-* 内置安全过滤、导出、图片懒加载、任务列表、多平台预览、多主题切换、复制到微信公众号/知乎功能
+* 导出、图片懒加载、任务列表、多平台预览、多主题切换、复制到微信公众号/知乎功能
 * 实现 CommonMark 和 GFM 规范，可对 Markdown 进行格式化和语法树查看，并支持[10+项](https://ld246.com/article/1549638745630#options-preview-markdown)配置
 * 工具栏包含 36+ 项操作，除支持扩展外还可对每一项中的[快捷键](https://ld246.com/article/1582778815353)、提示、提示位置、图标、点击事件、类名、子工具栏进行自定义
 * 表情/at/话题等自动补全扩展
@@ -114,6 +114,7 @@ Vditor 在这些方面做了努力，希望能为现代化的通用 Markdown 编
 
 * [Sym](https://github.com/88250/symphony) 一款用 Java 实现的现代化社区（论坛/BBS/社交网络/博客）平台
 * [Solo](https://github.com/88250/solo) & [Pipe](https://github.com/88250/pipe) B3log 分布式社区的博客端节点，欢迎加入下一代社区网络
+* [Tditor](https://tditor.com) 基于React、Vditor、Springboot， 一款打造极致文字创作体验的在线Markdown编辑平台
 * [Arya](https://github.com/nicejade/markdown-online-editor) 基于 Vue、Vditor，所构建的在线 Markdown 编辑器
 * [更多案例](https://github.com/Vanessa219/vditor/network/dependents?package_id=UGFja2FnZS0zMTY2Mzg4MzE%3D)
 
@@ -131,7 +132,7 @@ npm install vditor --save
 
 ```ts
 import Vditor from 'vditor'
-import "~vditor/src/assets/scss/index"
+import "~vditor/src/assets/less/index"
 
 const vditor = new Vditor(id, {options...})
 ```
@@ -141,9 +142,9 @@ const vditor = new Vditor(id, {options...})
 * 在 HTML 中插入 CSS 和 JavaScript，可参考 [demo](https://b3log.org/vditor/demo/index.html)
 
 ```html
-<!-- ⚠️生产环境请指定版本号，如 https://cdn.jsdelivr.net/npm/vditor@x.x.x/dist... -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vditor/dist/index.css" />
-<script src="https://cdn.jsdelivr.net/npm/vditor/dist/index.min.js"></script>
+<!-- ⚠️生产环境请指定版本号，如 https://unpkg.com/vditor@x.x.x/dist... -->
+<link rel="stylesheet" href="https://unpkg.com/vditor/dist/index.css" />
+<script src="https://unpkg.com/vditor/dist/index.min.js"></script>
 ```
 
 ### 示例代码
@@ -161,7 +162,7 @@ const vditor = new Vditor(id, {options...})
 
 * 编辑器初始化时可通过 `options.theme` 设置内置主题
 * 初始化完成后可通过 `setTheme` 更新编辑器主题
-* 可通过修改 [index.scss](https://github.com/Vanessa219/vditor/blob/master/src/assets/scss/index.scss) 中的变量对主题颜色进行定制
+* 可通过修改 [index.less](https://github.com/Vanessa219/vditor/blob/master/src/assets/less/index.less) 中的变量对主题颜色进行定制
 * 可参考现有结构和类名在原有基础上进行修改
 
 #### 内容主题
@@ -194,23 +195,23 @@ Markdown 输出的 HTML 所展现的外观。内置 ant-design, light，dark，w
 |   | 说明 | 默认值 |
 | - | - | - |
 | i18n | 多语言，参见 ITips | - |
-| rtl | 支持 RTL 模式，对阿拉伯等文字进行支持优化 | false |
 | undoDelay | 历史记录间隔 | - |
 | after | 编辑器异步渲染完成后的回调方法 | - |
 | height | 编辑器总高度 | 'auto' |
 | minHeight | 编辑区域最小高度 | - |
 | width | 编辑器总宽度，支持 % | 'auto' |
 | placeholder | 输入区域为空时的提示 | '' |
-| lang | 语言种类：en_US, ja_JP, ko_KR, ru_RU, zh_CN, zh_TW | 'zh_CN' |
+| lang | 语言种类：en_US, fr_FR, pt_BR, ja_JP, ko_KR, ru_RU, sv_SE, zh_CN, zh_TW | 'zh_CN' |
 | input(value: string) | 输入后触发  | - |
 | focus(value: string) | 聚焦后触发 | - |
 | blur(value: string) | 失焦后触发 | - |
+| keydown(event: KeyboardEvent) | 按下后触发 | - |
 | esc(value: string) | <kbd>esc</kbd> 按下后触发 | - |
 | ctrlEnter(value: string) | <kbd>⌘/ctrl+enter</kbd> 按下后触发 | - |
 | select(value: string) | 编辑器中选中文字后触发 | - |
 | tab | <kbd>tab</kbd> 键操作字符串，支持 `\t` 及任意字符串 | - |
 | typewriterMode | 是否启用打字机模式 | false |
-| cdn | 配置自建 CDN 地址 | `https://cdn.jsdelivr.net/npm/vditor@${VDITOR_VERSION}` |
+| cdn | 配置自建 CDN 地址 | `https://unpkg.com/vditor@${VDITOR_VERSION}` |
 | mode | 可选模式：sv, ir, wysiwyg | 'ir' |
 | debugger | 是否显示日志 | false |
 | value | 编辑器初始化值 | '' |
@@ -302,15 +303,18 @@ new Vditor('vditor', {
 
 |   | 说明 | 默认值 |
 | - | - | - |
+| defaultLang | 未指定语言时默认使用该语言 | '' |
 | enable | 是否启用代码高亮 | true |
 | style | 可选值参见[Chroma](https://xyproto.github.io/splash/docs/longer/all.html) | `github` |
 | lineNumber | 是否启用行号 | false |
+| langs | 自定义指定语言 | [CODE_LANGUAGES](https://github.com/Vanessa219/vditor/blob/53ca8f9a0e511b37b5dae7c6b15eb933e9e02ccd/src/ts/constants.ts#L20) |
 
 #### options.preview.markdown
 
 |   | 说明 | 默认值 |
 | - | - | - |
 | autoSpace | 自动空格 | false |
+| gfmAutoLink | 自动链接 | true |
 | fixTermTypo | 自动矫正术语 | false |
 | toc | 插入目录 | false |
 | footnotes | 脚注 | true |
@@ -329,7 +333,7 @@ new Vditor('vditor', {
 | - | - | - |
 | current | 当前主题 | "light" |
 | list | 可选主题列表 | { "ant-design": "Ant Design", dark: "Dark", light: "Light", wechat: "WeChat" } |
-| path | 主题样式地址 | `https://cdn.jsdelivr.net/npm/vditor@${VDITOR_VERSION}/dist/css/content-theme` |
+| path | 主题样式地址 | `https://unpkg.com/vditor@${VDITOR_VERSION}/dist/css/content-theme` |
 
 #### options.preview.math
 
@@ -338,6 +342,7 @@ new Vditor('vditor', {
 | inlineDigit | 内联数学公式起始 $ 后是否允许数字 | false |
 | macros | 使用 MathJax 渲染时传入的宏定义 | {} |
 | engine | 数学公式渲染引擎：KaTeX, MathJax | 'KaTeX' |
+| mathJaxOptions | 数学公式渲染引擎为 MathJax 时的参数 | - |
 
 #### options.preview.actions?: Array<IPreviewAction | IPreviewActionCustom>
 
@@ -352,6 +357,20 @@ new Vditor('vditor', {
 | className | 按钮类名 | - |
 | click(key: string) | 按钮点击回调事件 | - |
 
+#### options.image
+
+|   | 说明 | 默认值 |
+| - | - | - |
+| isPreview | 是否预览图片 | true |
+| preview(bom: Element) => void | 图片预览处理 | - |
+
+#### options.link
+
+|   | 说明 | 默认值 |
+| - | - | - |
+| isOpen | 是否打开链接地址 | true |
+| click(bom: Element) => void | 点击链接事件 | - |
+
 #### options.hint
 
 |   | 说明 | 默认值 |
@@ -360,7 +379,7 @@ new Vditor('vditor', {
 | delay | 提示 debounce 毫秒间隔 | 200 |
 | emoji | 默认表情，可从[lute/emoji_map](https://github.com/88250/lute/blob/master/parse/emoji_map.go) 中选取，也可自定义 | { '+1': '👍', '-1': '👎', 'heart': '❤️', 'cold_sweat': '😰' } |
 | emojiTail | 常用表情提示 | - |
-| emojiPath | 表情图片地址 | `https://cdn.jsdelivr.net/npm/vditor@${VDITOR_VERSION}/dist/images/emoji` |
+| emojiPath | 表情图片地址 | `https://unpkg.com/vditor@${VDITOR_VERSION}/dist/images/emoji` |
 | extend: IHintExtend[] | 对 @/话题等关键字自动补全的扩展 | [] |
 
 ```ts
@@ -521,7 +540,7 @@ if (xhr.status === 200) {
 
 #### static methods
 
-* 不需要进行编辑操作时，仅需引入 [`method.min.js`](https://cdn.jsdelivr.net/npm/vditor/dist/) 后如下直接调用
+* 不需要进行编辑操作时，仅需引入 [`method.min.js`](https://unpkg.com/vditor/dist/) 后如下直接调用
 
 ```js
 Vditor.mermaidRender(document)
@@ -601,7 +620,7 @@ options?: IPreviewOptions {
 
 ### CDN 切换
 
-由于使用了按需加载的机制，默认 CDN 为 [https://cdn.jsdelivr.net/npm/vditor](https://cdn.jsdelivr.net/npm/vditor)@版本号
+由于使用了按需加载的机制，默认 CDN 为 [https://unpkg.com/vditor](https://unpkg.com/vditor)@版本号
 
 如果代码有修改或需要使用自建 CDN 的话，可按以下步骤进行操作：
 

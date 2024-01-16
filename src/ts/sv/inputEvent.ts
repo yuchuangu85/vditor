@@ -2,6 +2,7 @@ import {scrollCenter} from "../util/editorCommonEvent";
 import {hasClosestByAttribute} from "../util/hasClosest";
 import {getSelectPosition, setRangeByWbr} from "../util/selection";
 import {getSideByType, processAfterRender, processSpinVditorSVDOM} from "./process";
+import {combineFootnote} from "./combineFootnote";
 
 export const inputEvent = (vditor: IVditor, event?: InputEvent) => {
     const range = getSelection().getRangeAt(0).cloneRange();
@@ -140,22 +141,24 @@ export const inputEvent = (vditor: IVditor, event?: InputEvent) => {
             html = blockElement.previousElementSibling.textContent + html;
             blockElement.previousElementSibling.remove();
         }
-
         // 添加链接引用
+        let footnotes = ""
+
         vditor.sv.element.querySelectorAll("[data-type='link-ref-defs-block']").forEach((item, index) => {
-            if (index === 0 && item && !(blockElement as HTMLElement).isEqualNode(item.parentElement)) {
-                html += "\n" + item.parentElement.textContent;
+            if (item && !(blockElement as HTMLElement).isEqualNode(item.parentElement)) {
+                footnotes += item.parentElement.textContent + "\n";
                 item.parentElement.remove();
             }
         });
 
-        // 添加脚注
+        // 添加脚注到文章头，便于lute处理
         vditor.sv.element.querySelectorAll("[data-type='footnotes-link']").forEach((item, index) => {
-            if (index === 0 && item && !(blockElement as HTMLElement).isEqualNode(item.parentElement)) {
-                html += "\n" + item.parentElement.textContent;
+            if (item && !(blockElement as HTMLElement).isEqualNode(item.parentElement)) {
+                footnotes += item.parentElement.textContent + "\n";
                 item.parentElement.remove();
             }
         });
+        html = footnotes + html;
     }
     html = processSpinVditorSVDOM(html, vditor);
     if (isSVElement) {
@@ -164,36 +167,14 @@ export const inputEvent = (vditor: IVditor, event?: InputEvent) => {
         blockElement.outerHTML = html;
     }
 
-    let firstLinkRefDefElement: Element;
-    const allLinkRefDefsElement = vditor.sv.element.querySelectorAll("[data-type='link-ref-defs-block']");
-    allLinkRefDefsElement.forEach((item, index) => {
-        if (index === 0) {
-            firstLinkRefDefElement = item.parentElement;
-        } else {
-            firstLinkRefDefElement.lastElementChild.remove();
-            firstLinkRefDefElement.insertAdjacentHTML("beforeend", `${item.parentElement.innerHTML}`);
-            item.parentElement.remove();
-        }
-    });
-    if (allLinkRefDefsElement.length > 0) {
-        vditor.sv.element.insertAdjacentElement("beforeend", firstLinkRefDefElement);
-    }
+    vditor.sv.element.querySelectorAll("[data-type='link-ref-defs-block']").forEach((item) => {
+        vditor.sv.element.insertAdjacentElement("beforeend", item.parentElement)
+    })
 
-    // 脚注合并后添加的末尾
-    let firstFootnoteElement: Element;
-    const allFootnoteElement = vditor.sv.element.querySelectorAll("[data-type='footnotes-link']");
-    allFootnoteElement.forEach((item, index) => {
-        if (index === 0) {
-            firstFootnoteElement = item.parentElement;
-        } else {
-            firstFootnoteElement.lastElementChild.remove();
-            firstFootnoteElement.insertAdjacentHTML("beforeend", `${item.parentElement.innerHTML}`);
-            item.parentElement.remove();
-        }
-    });
-    if (allFootnoteElement.length > 0) {
-        vditor.sv.element.insertAdjacentElement("beforeend", firstFootnoteElement);
-    }
+    // 合并脚注
+    combineFootnote(vditor.sv.element, (root: HTMLElement) => {
+        vditor.sv.element.insertAdjacentElement("beforeend", root)
+    })
 
     setRangeByWbr(vditor.sv.element, range);
 

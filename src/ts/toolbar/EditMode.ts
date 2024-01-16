@@ -18,6 +18,7 @@ import {
     removeCurrentToolbar,
     showToolbar, toggleSubMenu,
 } from "./setToolbar";
+import {combineFootnote} from "../sv/combineFootnote";
 
 export const setEditMode = (vditor: IVditor, type: string, event: Event | string) => {
     let markdownText;
@@ -122,6 +123,7 @@ export const setEditMode = (vditor: IVditor, type: string, event: Event | string
             svHTML = "";
         }
         vditor.sv.element.innerHTML = svHTML;
+        combineFootnote(vditor.sv.element)
         processSVAfterRender(vditor, {
             enableAddUndoStack: true,
             enableHint: false,
@@ -145,7 +147,7 @@ export const setEditMode = (vditor: IVditor, type: string, event: Event | string
         vditor.toolbar.elements["edit-mode"].querySelector(`button[data-mode="${vditor.currentMode}"]`).classList.add("vditor-menu--current");
     }
 
-    vditor.outline.toggle(vditor, vditor.currentMode !== "sv" && vditor.options.outline.enable);
+    vditor.outline.toggle(vditor, vditor.currentMode !== "sv" && vditor.options.outline.enable, typeof event !== "string");
 };
 
 export class EditMode extends MenuItem {

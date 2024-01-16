@@ -1,4 +1,4 @@
-import "./assets/scss/index.scss";
+import "./assets/less/index.less";
 import VditorMethod from "./method";
 import {Constants, VDITOR_VERSION} from "./ts/constants";
 import {DevTools} from "./ts/devtools/index";
@@ -68,7 +68,7 @@ class Vditor extends VditorMethod {
 
         // 支持自定义国际化
         if (!mergedOptions.i18n) {
-            if (!["en_US", "ja_JP", "ko_KR", "ru_RU", "zh_CN", "zh_TW"].includes(mergedOptions.lang)) {
+            if (!["en_US", "fr_FR", "pt_BR", "ja_JP", "ko_KR", "ru_RU", "sv_SE", "zh_CN", "zh_TW"].includes(mergedOptions.lang)) {
                 throw new Error(
                     "options.lang error, see https://ld246.com/article/1549638745630#options",
                 );
@@ -82,6 +82,10 @@ class Vditor extends VditorMethod {
                 });
                 addScript(`${mergedOptions.cdn}/dist/js/i18n/${mergedOptions.lang}.js`, i18nScriptID).then(() => {
                     this.init(id as HTMLElement, mergedOptions);
+                }).catch(error => {
+                    const tip = new Tip();
+                    document.body.appendChild(tip.element);
+                    tip.show(`GET ${mergedOptions.cdn}/dist/js/i18n/${mergedOptions.lang}.js net::ERR_ABORTED 404 (Not Found)`, 0)
                 });
             }
         } else {
@@ -255,6 +259,7 @@ class Vditor extends VditorMethod {
         const tmpElement = document.createElement("template");
         tmpElement.innerHTML = value;
         range.insertNode(tmpElement.content.cloneNode(true));
+        range.collapse(false);
         if (this.vditor.currentMode === "sv") {
             this.vditor.sv.preventInput = true;
             if (render) {
@@ -276,7 +281,7 @@ class Vditor extends VditorMethod {
     /** 设置编辑器内容 */
     public setValue(markdown: string, clearStack = false) {
         if (this.vditor.currentMode === "sv") {
-            this.vditor.sv.element.innerHTML = this.vditor.lute.SpinVditorSVDOM(markdown);
+            this.vditor.sv.element.innerHTML = `<div data-block='0'>${this.vditor.lute.SpinVditorSVDOM(markdown)}</div>`;
             processSVAfterRender(this.vditor, {
                 enableAddUndoStack: true,
                 enableHint: false,
@@ -327,7 +332,10 @@ class Vditor extends VditorMethod {
         this.vditor.element.innerHTML = this.vditor.originalInnerHTML;
         this.vditor.element.classList.remove("vditor");
         this.vditor.element.removeAttribute("style");
-        document.getElementById("vditorIconScript").remove();
+        const iconScript = document.getElementById("vditorIconScript")
+        if (iconScript) {
+            iconScript.remove();
+        }
         this.clearCache();
 
         UIUnbindListener();
@@ -474,6 +482,7 @@ class Vditor extends VditorMethod {
         ).then(() => {
             this.vditor.lute = setLute({
                 autoSpace: this.vditor.options.preview.markdown.autoSpace,
+                gfmAutoLink: this.vditor.options.preview.markdown.gfmAutoLink,
                 codeBlockPreview: this.vditor.options.preview.markdown
                     .codeBlockPreview,
                 emojiSite: this.vditor.options.hint.emojiPath,

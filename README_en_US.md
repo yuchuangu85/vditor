@@ -52,7 +52,7 @@ Vditor has made efforts in these areas, hoping to make some contributions to the
 
 * Support three editing modes: WYSIWYG(wysiwyg), Instant Rendering(ir) and Split View(sv)
 * Support outline, mathematical formulas, mind maps, charts, flowcharts, Gantt charts, timing charts, staffs, [multimedia](https://ld246.com/article/1589813914768), voice reading, heading anchors, code highlighting and copying, graphviz rendering
-* Built-in security filtering, export, image lazy loading, task list, multi-platform preview, multi-theme switching, copy to WeChat/zhihu function
+* Export, image lazy loading, task list, multi-platform preview, multi-theme switching, copy to WeChat/zhihu function
 * Implementation of CommonMark and GFM specifications, formatting and syntax tree viewing of Markdown, and support for [10+ configurations](https://ld246.com/article/1549638745630#options-preview-markdown)
 * The toolbar contains 36+ items of operations. In addition to support for expansion, the [shortcut keys](https://ld246.com/article/1582778815353), tip, tip positions, icons, click events, class names, and sub-toolbars can be customized
 * Extend auto-complete for emoji/@/# and so on
@@ -129,7 +129,7 @@ npm install vditor --save
 
 ```ts
 import Vditor from 'vditor'
-import "~vditor/src/assets/scss/index" // Or use dark
+import "~vditor/src/assets/less/index" // Or use dark
 
 const vditor = new Vditor(id, {options...})
 ```
@@ -139,9 +139,9 @@ const vditor = new Vditor(id, {options...})
 * Insert CSS and js in HTML, you can refer to [demo](https://b3log.org/vditor/demo/index.html)
 
 ```html
-<!-- ⚠️Please specify the version number in the production environment, such as https://cdn.jsdelivr.net/npm/vditor@x.x.x/dist... -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vditor/dist/index.css" />
-<script src="https://cdn.jsdelivr.net/npm/vditor/dist/index.min.js"></script>
+<!-- ⚠️Please specify the version number in the production environment, such as https://unpkg.com/vditor@x.x.x/dist... -->
+<link rel="stylesheet" href="https://unpkg.com/vditor/dist/index.css" />
+<script src="https://unpkg.com/vditor/dist/index.min.js"></script>
 ```
 
 ### Demo code
@@ -154,8 +154,8 @@ const vditor = new Vditor(id, {options...})
 ### Themes
 
 * Support four sets of black and white themes: and-design, classic, dark, wechat
-* Use the scss/css developed by yourself to fully customize the style after referring to the existing style
-* Theme colors can be customized by modifying variables in [index.scss](https://github.com/Vanessa219/vditor/blob/master/src/assets/scss/index.scss)
+* Use the less/css developed by yourself to fully customize the style after referring to the existing style
+* Theme colors can be customized by modifying variables in [index.less](https://github.com/Vanessa219/vditor/blob/master/src/assets/less/index.less)
 * Adding `class="vditor-reset"` (classic theme) or `class="vditor-reset vditor-reset--dark"` (black theme) attribute on the content display element can display the content more friendly
 
 ### API
@@ -171,23 +171,23 @@ Can be filled with element `id` or element itself` HTMLElement`
 |   | Explanation | Default |
 | - | - | - |
 | i18n | I18n, more details see ITips | - |
-| rtl | Support RTL layout, optimize for the languages like Arabic | false |
 | undoDelay | Undo interval | - |
 | after | Callback method after editor asynchronous rendering is completed | - |
 | height | Total editor height | 'auto' |
 | minHeight | Editing area minimum height | - |
 | width | Total editor width, supports % | 'auto' |
 | placeholder | Tips when the input area is empty | '' |
-| lang | I18n type: en_US, ja_JP, ko_KR, ru_RU, zh_CN, zh_TW | 'zh_CN' |
+| lang | I18n type: en_US, fr_FR, pt_BR, ja_JP, ko_KR, ru_RU, sv_SE, zh_CN, zh_TW | 'zh_CN' |
 | input | Trigger after input (value: string) | - |
 | focus | Trigger after focusing (value: string) | - |
 | blur | Trigger after out of focus (value: string) | - |
+| keydown(event: KeyboardEvent) | Trigger after keydown | - |
 | esc | Trigger after pressing <kbd>esc</kbd> (value: string) | - |
 | ctrlEnter | Trigger after pressing <kbd>⌘/ctrl+enter</kbd> (value: string) | - |
 | select | Triggered after selecting text in the editor (value: string) | - |
 | tab | <kbd>tab</kbd> key operation string, support `\ t` and any string | - |
 | typewriterMode | Whether to enable typewriter mode | false |
-| cdn | Configure self-built CDN address | `https://cdn.jsdelivr.net/npm/vditor@${VDITOR_VERSION}` |
+| cdn | Configure self-built CDN address | `https://unpkg.com/vditor@${VDITOR_VERSION}` |
 | mode | Editing mode: sv, ir, wysiwyg | 'ir' |
 | debugger | Whether to display the log | false |
 | value | Editor initialization value | '' |
@@ -281,21 +281,24 @@ new Vditor('vditor', {
 | - | - | - |
 | current | current Markdown Theme | "light" |
 | list | Choose Markdown Theme List | { "ant-design": "Ant Design", dark: "Dark", light: "Light", wechat: "WeChat" } |
-| path | CSS Path | `https://cdn.jsdelivr.net/npm/vditor@${VDITOR_VERSION}/dist/css/content-theme` |
+| path | CSS Path | `https://unpkg.com/vditor@${VDITOR_VERSION}/dist/css/content-theme` |
 
 #### options.preview.hljs
 
 |   | Explanation | Default |
 | - | - | - |
+| defaultLang | The language is used by default when no language is specified | '' |
 | enable | Whether to enable code syntax highlighting | true |
 | style | For optional values, see [Chroma](https://xyproto.github.io/splash/docs/longer/all.html) | `github` |
 | lineNumber | Whether to enable line number | false |
+| langs | Custom languages | [CODE_LANGUAGES](https://github.com/Vanessa219/vditor/blob/53ca8f9a0e511b37b5dae7c6b15eb933e9e02ccd/src/ts/constants.ts#L20) |
 
 #### options.preview.markdown
 
 |   | Explanation | Default |
 | - | - | - |
 | autoSpace | Autospace | false |
+| gfmAutoLink | Automatic link | true |
 | fixTermTypo | Automatically correct terminology | false |
 | toc | Insert Table of Contents | false |
 | footnotes | Footnotes | true |
@@ -315,6 +318,7 @@ new Vditor('vditor', {
 | inlineDigit | Whether numbers are allowed after the inline math formula starting with $ | false |
 | macros | Macro definition passed in when rendering with MathJax | {} |
 | engine | Math formula rendering engine: KaTeX, MathJax | 'KaTeX' |
+| mathJaxOptions | Parameters when the math formula rendering engine is MathJax | - |
 
 #### options.preview.actions
 
@@ -328,6 +332,20 @@ Default: ["desktop", "tablet", "mobile", "mp-wechat", "zhihu"]
 | className | Button Class | - |
 | click(key: string) | Click Event | - |
 
+#### options.image
+
+|   | Explanation | Default |
+| - | - | - |
+| isPreview | Whether to preview the picture | true |
+| preview(bom: Element) => void | Image preview processing | - |
+
+#### options.link
+
+|   | Explanation | Default |
+| - | - | - |
+| isOpen | Whether to open the link address | true |
+| click(bom: Element) => void | Click link event | - |
+
 #### options.hint
 
 |   | Explanation | Default |
@@ -336,7 +354,7 @@ Default: ["desktop", "tablet", "mobile", "mp-wechat", "zhihu"]
 | delay | Tip debounce millisecond interval | 200 |
 | emoji | The default emoji can be selected from [lute/emoji_map](https://github.com/88250/lute/blob/master/parse/emoji_map.go), or can be customized | { '+1': '👍', '-1': '👎', 'heart': '❤️', 'cold_sweat': '😰' } |
 | emojiTail | Common emoji | - |
-| emojiPath | Emoji path | `https://cdn.jsdelivr.net/npm/vditor@${VDITOR_VERSION}/dist/images/emoji` |
+| emojiPath | Emoji path | `https://unpkg.com/vditor@${VDITOR_VERSION}/dist/images/emoji` |
 | extend: IHintExtend[] | @/# and other keyword auto-completion expansion | [] |
 
 ```ts
@@ -475,7 +493,7 @@ xhr.send(JSON.stringify({url: src})); // src is the address of the image outside
 
 #### static methods
 
-* When no editing operation is required, just introduce [`method.min.js`](https://cdn.jsdelivr.net/npm/vditor/dist/) and directly call
+* When no editing operation is required, just introduce [`method.min.js`](https://unpkg.com/vditor/dist/) and directly call
 
 ```js
 Vditor.mermaidRender(document)
@@ -505,7 +523,7 @@ options?: IPreviewOptions {
   transform?(html: string): string; // Callback method before rendering
   after?(); // Callback method after rendering
   cdn?: string; // Self-built CDN address
-  lazyLoadImage?: string; // use "https://cdn.jsdelivr.net/npm/vditor/dist/images/img-loading.svg" to lazy load image
+  lazyLoadImage?: string; // use "https://unpkg.com/vditor/dist/images/img-loading.svg" to lazy load image
   markdown?: options.preview.markdown;
   renderers?: ILuteRender; // Custom rendering method https://ld246.com/article/1588412297062
 }
@@ -554,7 +572,7 @@ options?: IPreviewOptions {
 
 ### CDN switch
 
-Due to the on-demand loading mechanism, the default CDN is [https://cdn.jsdelivr.net/npm/vditor](https://cdn.jsdelivr.net/npm/vditor)@version number
+Due to the on-demand loading mechanism, the default CDN is [https://unpkg.com/vditor](https://unpkg.com/vditor)@version number
 
 If the code is modified or you need to use a self-built CDN, you can follow the steps below:
 

@@ -28,6 +28,7 @@ import {genImagePopover, genLinkRefPopover, highlightToolbarWYSIWYG} from "./hig
 import {getRenderElementNextNode, modifyPre} from "./inlineTag";
 import {input} from "./input";
 import {showCode} from "./showCode";
+import {getMarkdown} from "../markdown/getMarkdown";
 
 class WYSIWYG {
     public range: Range;
@@ -389,6 +390,9 @@ class WYSIWYG {
             if ((startSpace && blockElement.getAttribute("data-type") !== "code-block")
                 || endSpace || isHeadingMD(blockElement.innerHTML) ||
                 (isHrMD(blockElement.innerHTML) && blockElement.previousElementSibling)) {
+                if (typeof vditor.options.input === "function") {
+                    vditor.options.input(getMarkdown(vditor));
+                }
                 return;
             }
 
@@ -421,7 +425,13 @@ class WYSIWYG {
 
             // 打开链接
             if (event.target.tagName === "A") {
-                window.open(event.target.getAttribute("href"));
+                if (vditor.options.link.click) {
+                    vditor.options.link.click(event.target);
+                } else if (vditor.options.link.isOpen) {
+                    window.open(event.target.getAttribute("href"));
+                }
+                event.preventDefault();
+                return;
             }
 
             const range = getEditorRange(vditor);

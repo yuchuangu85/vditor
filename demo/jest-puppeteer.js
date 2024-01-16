@@ -1,5 +1,5 @@
 import Vditor from '../src/index'
-import '../src/assets/scss/index.scss'
+import '../src/assets/less/index.less'
 
 window.vditorTest = new Vditor('vditorTest', {
   tab: '\t',
@@ -32,8 +32,8 @@ window.vditorTest = new Vditor('vditorTest', {
     emoji: {
       '+1': '👍',
       '-1': '👎',
-      'trollface': 'https://unpkg.com/vditor@1.3.1/dist/images/emoji/trollface.png',
-      'huaji': 'https://unpkg.com/vditor@1.3.1/dist/images/emoji/huaji.gif',
+      'trollface': 'https://cdn.jsdelivr.net/npm/vditor@1.3.1/dist/images/emoji/trollface.png',
+      'huaji': 'https://cdn.jsdelivr.net/npm/vditor@1.3.1/dist/images/emoji/huaji.gif',
     },
     at: (key) => {
       console.log(`atUser: ${key}`)

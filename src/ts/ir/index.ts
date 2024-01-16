@@ -93,9 +93,9 @@ class IR {
             if (this.preventInput) {
                 this.preventInput = false;
                 processAfterRender(vditor, {
-                  enableAddUndoStack: true,
-                  enableHint: true,
-                  enableInput: true,
+                    enableAddUndoStack: true,
+                    enableHint: true,
+                    enableInput: true,
                 });
                 return;
             }
@@ -149,7 +149,11 @@ class IR {
             // 打开链接
             const aElement = hasClosestByAttribute(event.target, "data-type", "a");
             if (aElement && (!aElement.classList.contains("vditor-ir__node--expand"))) {
-                window.open(aElement.querySelector(":scope > .vditor-ir__marker--link").textContent);
+                if (vditor.options.link.click) {
+                    vditor.options.link.click(aElement.querySelector(":scope > .vditor-ir__marker--link"));
+                } else if (vditor.options.link.isOpen) {
+                    window.open(aElement.querySelector(":scope > .vditor-ir__marker--link").textContent);
+                }
                 return;
             }
 

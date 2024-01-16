@@ -18,7 +18,7 @@ export abstract class Constants {
     "rainbow_dash", "rrt", "solarized-dark", "solarized-dark256", "solarized-light", "swapoff", "tango", "trac",
     "vim", "vs", "xcode", "ant-design"];
   public static readonly CODE_LANGUAGES: string[] = ["mermaid", "echarts", "mindmap", "plantuml", "abc", "graphviz", "flowchart", "apache",
-    "js", "ts", "html",
+    "js", "ts", "html","markmap",
     // common
     "properties", "apache", "bash", "c", "csharp", "cpp", "css", "coffeescript", "diff", "go", "xml", "http",
     "json", "java", "javascript", "kotlin", "less", "lua", "makefile", "markdown", "nginx", "objectivec", "php",
@@ -29,9 +29,10 @@ export abstract class Constants {
     // ext
     "solidity", "yul"
   ];
-  public static readonly CDN = `https://cdn.jsdelivr.net/npm/vditor@${VDITOR_VERSION}`;
+  public static readonly CDN = `https://unpkg.com/vditor@${VDITOR_VERSION}`;
   public static readonly MARKDOWN_OPTIONS = {
     autoSpace: false,
+    gfmAutoLink: true,
     codeBlockPreview: true,
     fixTermTypo: false,
     footnotes: true,
@@ -47,6 +48,7 @@ export abstract class Constants {
   public static readonly HLJS_OPTIONS = {
     enable: true,
     lineNumber: false,
+    defaultLang: "",
     style: "github",
   };
   public static readonly MATH_OPTIONS: IMath = {

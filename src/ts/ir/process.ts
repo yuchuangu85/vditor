@@ -23,7 +23,7 @@ export const processHint = (vditor: IVditor) => {
             const key =
                 preBeforeElement.textContent.substring(0, getSelectPosition(preBeforeElement, vditor.ir.element).start)
                     .replace(Constants.ZWSP, "");
-            Constants.CODE_LANGUAGES.forEach((keyName) => {
+            (vditor.options.preview.hljs.langs || Constants.CODE_LANGUAGES).forEach((keyName) => {
                 if (keyName.indexOf(key.toLowerCase()) > -1) {
                     matchLangData.push({
                         html: keyName,
@@ -185,7 +185,9 @@ export const processToolbar = (vditor: IVditor, actionBtn: Element, prefix: stri
             if (range.toString() === "") {
                 html = `${prefix}<wbr>${suffix}`;
             } else {
-                if (commandName === "code" || commandName === "table") {
+                if (commandName === "code") {
+                    html = `${prefix}\n${range.toString()}<wbr>${suffix}`;
+                } else if (commandName === "table") {
                     html = `${prefix}${range.toString()}<wbr>${suffix}`;
                 } else {
                     html = `${prefix}${range.toString()}${suffix}<wbr>`;

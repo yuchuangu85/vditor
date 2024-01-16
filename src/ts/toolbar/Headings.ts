@@ -31,6 +31,10 @@ export class Headings extends MenuItem {
         const actionBtn = this.element.children[0] as HTMLElement;
         actionBtn.addEventListener(getEventName(), (event) => {
             event.preventDefault();
+            // https://github.com/Vanessa219/vditor/issues/1391
+            clearTimeout(vditor.wysiwyg.afterRenderTimeoutId);
+            clearTimeout(vditor.ir.processTimeoutId);
+            clearTimeout(vditor.sv.processTimeoutId);
             if (actionBtn.classList.contains(Constants.CLASS_MENU_DISABLED)) {
                 return;
             }

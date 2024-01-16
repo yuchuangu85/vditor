@@ -11,6 +11,7 @@ import {processCodeRender} from "../util/processCode";
 import {getSelectPosition, setRangeByWbr} from "../util/selection";
 import {renderToc} from "../util/toc";
 import {processAfterRender} from "./process";
+import {getMarkdown} from "../markdown/getMarkdown";
 
 export const input = (vditor: IVditor, range: Range, ignoreSpace = false, event?: InputEvent) => {
     let blockElement = hasClosestBlock(range.startContainer);
@@ -51,6 +52,9 @@ export const input = (vditor: IVditor, range: Range, ignoreSpace = false, event?
         }
 
         if (startSpace) {
+            if (typeof vditor.options.input === "function") {
+                vditor.options.input(getMarkdown(vditor));
+            }
             return;
         }
         if (endSpace) {
@@ -62,6 +66,9 @@ export const input = (vditor: IVditor, range: Range, ignoreSpace = false, event?
                 if (previousNode && previousNode.nodeType !== 3 && previousNode.classList.contains("vditor-ir__node--expand")) {
                     // FireFox https://github.com/Vanessa219/vditor/issues/239
                     previousNode.classList.remove("vditor-ir__node--expand");
+                }
+                if (typeof vditor.options.input === "function") {
+                    vditor.options.input(getMarkdown(vditor));
                 }
                 return;
             }
@@ -141,21 +148,23 @@ export const input = (vditor: IVditor, range: Range, ignoreSpace = false, event?
             html = blockElement.previousElementSibling.outerHTML + html;
             blockElement.previousElementSibling.remove();
         }
-        // 添加链接引用
-        vditor.ir.element.querySelectorAll("[data-type='link-ref-defs-block']").forEach((item) => {
-            if (item && !(blockElement as HTMLElement).isEqualNode(item)) {
-                html += item.outerHTML;
-                item.remove();
-            }
-        });
+        if (!blockElement.innerText.startsWith("```")) {
+            // 添加链接引用
+            vditor.ir.element.querySelectorAll("[data-type='link-ref-defs-block']").forEach((item) => {
+                if (item && !(blockElement as HTMLElement).isEqualNode(item)) {
+                    html += item.outerHTML;
+                    item.remove();
+                }
+            });
 
-        // 添加脚注
-        vditor.ir.element.querySelectorAll("[data-type='footnotes-block']").forEach((item) => {
-            if (item && !(blockElement as HTMLElement).isEqualNode(item)) {
-                html += item.outerHTML;
-                item.remove();
-            }
-        });
+            // 添加脚注
+            vditor.ir.element.querySelectorAll("[data-type='footnotes-block']").forEach((item) => {
+                if (item && !(blockElement as HTMLElement).isEqualNode(item)) {
+                    html += item.outerHTML;
+                    item.remove();
+                }
+            });
+        }
     } else {
         html = blockElement.innerHTML;
     }

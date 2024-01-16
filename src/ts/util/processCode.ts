@@ -6,6 +6,7 @@ import {graphvizRender} from "../markdown/graphvizRender";
 import {highlightRender} from "../markdown/highlightRender";
 import {mathRender} from "../markdown/mathRender";
 import {mermaidRender} from "../markdown/mermaidRender";
+import {markmapRender} from "../markdown/markmapRender";
 import {mindmapRender} from "../markdown/mindmapRender";
 import {plantumlRender} from "../markdown/plantumlRender";
 
@@ -62,13 +63,12 @@ export const processCodeRender = (previewPanel: HTMLElement, vditor: IVditor) =>
         return;
     }
     const language = previewPanel.firstElementChild.className.replace("language-", "");
-    if (!language) {
-        return;
-    }
     if (language === "abc") {
         abcRender(previewPanel, vditor.options.cdn);
     } else if (language === "mermaid") {
         mermaidRender(previewPanel, vditor.options.cdn, vditor.options.theme);
+    } else if (language === "markmap") {
+        markmapRender(previewPanel, vditor.options.cdn, vditor.options.theme);
     } else if (language === "flowchart") {
         flowchartRender(previewPanel, vditor.options.cdn);
     } else if (language === "echarts") {
