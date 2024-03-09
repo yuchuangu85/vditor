@@ -395,6 +395,10 @@ class WYSIWYG {
                 }
                 return;
             }
+            // https://github.com/Vanessa219/vditor/issues/1565
+            if (event.inputType === "insertParagraph" && this.element.innerHTML === '<p><br></p><p><br></p>') {
+                blockElement.previousElementSibling.remove();
+            }
 
             input(vditor, range, event);
         });
@@ -424,11 +428,12 @@ class WYSIWYG {
             }
 
             // 打开链接
-            if (event.target.tagName === "A") {
+            const a = hasClosestByMatchTag(event.target, "A");
+            if (a) {
                 if (vditor.options.link.click) {
-                    vditor.options.link.click(event.target);
+                    vditor.options.link.click(a);
                 } else if (vditor.options.link.isOpen) {
-                    window.open(event.target.getAttribute("href"));
+                    window.open(a.getAttribute("href"));
                 }
                 event.preventDefault();
                 return;

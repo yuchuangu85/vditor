@@ -7,13 +7,32 @@
   * 添加 option.keydown
   * 添加 option.link 和 options.image
   * 添加 hljs.defaultLang
+  * 添加 hljs.renderMenu
 
 ### TODO
 
 * [open issues](https://github.com/Vanessa219/vditor/issues)
 
-### v3.9.9 / 2024-01
+### v3.10.2 / 2024-04
 
+* [改进松散模式下的列表展现](https://github.com/Vanessa219/vditor/issues/1575) `改进功能`
+* [mermaid 图表渲染自适应](https://github.com/Vanessa219/vditor/issues/1574) `改进功能`
+
+### v3.10.1 / 2024-03-05
+
+* [`insertValue` 后无法回车](https://github.com/Vanessa219/vditor/issues/1566) `修复缺陷`
+* [IR 模式滚动时隐藏代码块语言提示](https://github.com/Vanessa219/vditor/issues/1567) `改进功能`
+* [内容为空时回车禁止光标跳动](https://github.com/Vanessa219/vditor/issues/1565) `开发重构`
+* [⬆️ Bump ip from 1.1.5 to 1.1.9](https://github.com/Vanessa219/vditor/pull/1563) `开发重构`
+* [WYSIWYG 模式下链接包含粗体无法打开](https://github.com/Vanessa219/vditor/issues/1560) `改进功能`
+* [添加 options.preview.hljs.renderMenu 方法](https://github.com/Vanessa219/vditor/issues/1553) `引入特性`
+
+### v3.9.9 / 2024-01-30
+
+* [导出 PDF 时主题错误](https://github.com/Vanessa219/vditor/issues/1549) `修复缺陷`
+* [改进表格中行内数学公式 `|` 的渲染](https://github.com/Vanessa219/vditor/issues/1550) `改进功能`
+* [wysiwyg 模式下通过输入框修改元素属性时触发 input](https://github.com/Vanessa219/vditor/issues/1542) `改进功能`
+* [自定义渲染器支持](https://github.com/Vanessa219/vditor/issues/1540) `引入特性`
 
 ### v3.9.8 / 2023-12-26
 
