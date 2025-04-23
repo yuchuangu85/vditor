@@ -1,20 +1,104 @@
 ## Vditor change log
 
 ### 升级
+
+* 3.11
+  * 添加 options.upload.cancel
+* 3.10
+  * 添加 options.unSelect
 * 3.9
+  * 添加 insertEmptyBlock
+  * 添加 markmapRender 方法
+  * 添加 SMILESRender 方法
+  * 添加 insertMD 方法
+  * 添加 options.upload.renderLinkDest
   * 添加 options.preview.math.mathJaxOptions
   * 添加 hljs.langs
   * 添加 option.keydown
   * 添加 option.link 和 options.image
   * 添加 hljs.defaultLang
   * 添加 hljs.renderMenu
+  * 添加 preview.render.media.enable
+  * 添加 updateToolbarConfig
 
 ### TODO
 
 * [open issues](https://github.com/Vanessa219/vditor/issues)
 
-### v3.10.2 / 2024-04
+### v3.11.1 / 2025-05
 
+* [待办列表回车换行错误](https://github.com/Vanessa219/vditor/issues/1789) `修复缺陷`
+
+### v3.11.0 / 2025-04-09
+
+* [添加 `options.upload.cancel` 回调](https://github.com/Vanessa219/vditor/issues/1791) `引入特性`
+* [修复代码行号对不齐](https://github.com/Vanessa219/vditor/issues/1786) `修复缺陷`
+* [mermaid 升级至 11.6.0](https://github.com/Vanessa219/vditor/issues/1140) `开发重构`
+* [初始化后立即 `destroy` 不再进行 `after` 的回调](https://github.com/Vanessa219/vditor/issues/1790) `改进功能`
+* [点击复制按钮不展开编辑区域](https://github.com/Vanessa219/vditor/issues/1768) `改进功能`
+* [添加 `unSelect` 回调](https://github.com/Vanessa219/vditor/pull/1775) `改进功能`
+
+### v3.10.9 / 2025-02-11
+
+* [任务列表中的无序列表回车异常](https://github.com/Vanessa219/vditor/issues/1754) `修复缺陷`
+* [添加 `insertEmptyBlock` 方法](https://github.com/Vanessa219/vditor/pull/1745) `开发重构`
+* [撤销后图表会重复](https://github.com/Vanessa219/vditor/issues/1738) `修复缺陷`
+* [设置 defaultLang 之后，指定代码失效](https://github.com/Vanessa219/vditor/issues/1728) `修复缺陷`
+
+### v3.10.8 / 2024-12-03
+
+* [任务列表勾选和取消勾选时保持背景色不变](https://github.com/Vanessa219/vditor/issues/1721) `改进功能`
+* [代码块主题预览失效](https://github.com/Vanessa219/vditor/issues/1722) `修复缺陷`
+* [带 tag 的数学公式会出现滚动条](https://github.com/Vanessa219/vditor/issues/1710) `改进功能`
+* [行内公式撤销异常](https://github.com/Vanessa219/vditor/issues/1706) `修复缺陷`
+* [改进俄语](https://github.com/Vanessa219/vditor/pull/1702) `文档相关`
+
+### v3.10.7 / 2024-10-15
+
+* [支持化学物质结构渲染](https://github.com/Vanessa219/vditor/issues/1158) `引入特性`
+* [内容为空时使用工具栏插入表情错误](https://github.com/Vanessa219/vditor/issues/1662) `修复缺陷`
+* [更新 hljs，支持更多的语言和外观](https://github.com/Vanessa219/vditor/issues/1680) `改进功能`
+* [撤销后 echart 无法渲染](https://github.com/Vanessa219/vditor/issues/1673) `修复缺陷`
+
+### v3.10.6 / 2024-09-11
+
+* [支持 echarts 中执行函数](https://github.com/Vanessa219/vditor/issues/1672) `改进功能`
+* [井号后输入空格就渲染标题](https://github.com/Vanessa219/vditor/issues/729) `改进功能`
+* [ir 模式下标题删除报错](https://github.com/Vanessa219/vditor/issues/1666) `修复缺陷`
+* [升级 echarts 至 5.5.1](https://github.com/Vanessa219/vditor/issues/1664) `开发重构`
+* [添加 `insertMD` 方法](https://github.com/Vanessa219/vditor/issues/1640) `引入特性`
+
+### v3.10.5 / 2024-08-09
+
+* [添加 `upload.renderLinkDest` 用于扩展粘贴时图片链接的处理](https://github.com/Vanessa219/vditor/issues/1186) `引入特性`
+* [图标配置为 `material` 时，列表反向缩进与缩进的图标错误](https://github.com/Vanessa219/vditor/issues/1656) `修复缺陷`
+* [提供非混淆版本的产物代码](https://github.com/Vanessa219/vditor/issues/1653) `开发重构`
+* [Bump ws from 6.2.2 to 6.2.3](https://github.com/Vanessa219/vditor/pull/1635) `dependencies`
+* [支持 SV 模式下列表的反向缩进](https://github.com/Vanessa219/vditor/pull/1630) `引入特性`
+* [添加 `updateToolbarConfig` 方法](https://github.com/Vanessa219/vditor/issues/1627) `引入特性`
+
+### v3.10.4 / 2024-04-16
+
+* [移动端支持划选阅读](https://github.com/Vanessa219/vditor/issues/1611) `改进功能`
+* [改进代码样式外链地址匹配规则](https://github.com/Vanessa219/vditor/pull/1607) `改进功能`
+* [移动端预览模式下点击复制代码不弹起键盘](https://github.com/Vanessa219/vditor/issues/1603) `改进功能`
+* [大纲对不齐](https://github.com/Vanessa219/vditor/issues/1591) `改进功能`
+* [options.preview.hljs.linenumber 设置为 true 时复制按钮消失](https://github.com/Vanessa219/vditor/issues/1601) `修复缺陷`
+
+### v3.10.3 / 2024-04-02
+
+* [⬆️ Bump express from 4.17.3 to 4.19.2](https://github.com/Vanessa219/vditor/pull/1594) `dependencies`
+* [id 不存在时给出对应提示](https://github.com/Vanessa219/vditor/issues/1562) `改进功能`
+* [https 下请求 plantuml 会被阻止](https://github.com/Vanessa219/vditor/pull/1586) `改进功能`
+* [拼写错误](https://github.com/Vanessa219/vditor/issues/1588) `文档相关`
+* [⬆️ Bump webpack-dev-middleware from 5.3.1 to 5.3.4](https://github.com/Vanessa219/vditor/pull/1590) `dependencies`
+* [添加 `preview.render.media.enable` 参数](https://github.com/Vanessa219/vditor/issues/1583) `引入特性`
+
+### v3.10.2 / 2024-03-19
+
+* [使用 object 内嵌 plantuml 以支持特殊语法](https://github.com/Vanessa219/vditor/pull/1579) `改进功能`
+* [⬆️ Bump follow-redirects from 1.15.4 to 1.15.6](https://github.com/Vanessa219/vditor/pull/1582) `dependencies`
+* [改进 bilibili 视频网站解析](https://github.com/Vanessa219/vditor/issues/1581) `改进功能`
 * [改进松散模式下的列表展现](https://github.com/Vanessa219/vditor/issues/1575) `改进功能`
 * [mermaid 图表渲染自适应](https://github.com/Vanessa219/vditor/issues/1574) `改进功能`
 

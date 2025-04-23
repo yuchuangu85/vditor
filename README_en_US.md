@@ -178,13 +178,14 @@ Can be filled with element `id` or element itself` HTMLElement`
 | width | Total editor width, supports % | 'auto' |
 | placeholder | Tips when the input area is empty | '' |
 | lang | I18n type: en_US, fr_FR, pt_BR, ja_JP, ko_KR, ru_RU, sv_SE, zh_CN, zh_TW | 'zh_CN' |
-| input | Trigger after input (value: string) | - |
-| focus | Trigger after focusing (value: string) | - |
-| blur | Trigger after out of focus (value: string) | - |
+| input(value: string) | Trigger after input  | - |
+| focus(value: string) | Trigger after focusing | - |
+| blur(value: string) | Trigger after out of focus | - |
 | keydown(event: KeyboardEvent) | Trigger after keydown | - |
-| esc | Trigger after pressing <kbd>esc</kbd> (value: string) | - |
-| ctrlEnter | Trigger after pressing <kbd>⌘/ctrl+enter</kbd> (value: string) | - |
-| select | Triggered after selecting text in the editor (value: string) | - |
+| esc(value: string) | Trigger after pressing | - |
+| ctrlEnter(value: string) | Trigger after pressing <kbd>⌘/ctrl+enter</kbd> | - |
+| select(value: string) | Triggered after selecting text in the editor | - |
+| unSelect() | Triggered after un selecting text in the editor | - |
 | tab | <kbd>tab</kbd> key operation string, support `\ t` and any string | - |
 | typewriterMode | Whether to enable typewriter mode | false |
 | cdn | Configure self-built CDN address | `https://unpkg.com/vditor@${VDITOR_VERSION}` |
@@ -293,7 +294,7 @@ new Vditor('vditor', {
 | style | For optional values, see [Chroma](https://xyproto.github.io/splash/docs/longer/all.html) | `github` |
 | lineNumber | Whether to enable line number | false |
 | langs | Custom languages | [CODE_LANGUAGES](https://github.com/Vanessa219/vditor/blob/53ca8f9a0e511b37b5dae7c6b15eb933e9e02ccd/src/ts/constants.ts#L20) |
-| renderMenu | render menu button | - |
+| renderMenu(code: HTMLElement, copy: HTMLElement) | render menu button | - |
 
 #### options.preview.markdown
 
@@ -333,6 +334,12 @@ Default: ["desktop", "tablet", "mobile", "mp-wechat", "zhihu"]
 | text | Button Text | - |
 | className | Button Class | - |
 | click(key: string) | Click Event | - |
+
+#### options.preview.render.media
+
+|        | Explanation        | Default  |
+|--------|-----------|------|
+| enable | Whether to enable multimedia render | true |
 
 #### options.image
 
@@ -427,10 +434,12 @@ xhr.send(JSON.stringify({url: src})); // src is the address of the image outside
 | handler(files: File[]) => string \| null \| Promise<string> \| Promise<null> | Custom upload, return error message when an error occurs | - |
 | format | Transform the data returned by the server to meet the built-in data structure (files: File[], responseText: string): string | - |
 | file(files: File[]): File[] \| Promise<File[]> | Process the uploaded file before return. | - |
+| cancel(files: File[]): void | Cancel uploading a file. | - |
 | setHeaders | Use the return value to set the header before uploading (): { [key: string]: string } | - |
 | extraData | Append data to FormData { [key: string]: string | Blob } | - |
 | multiple | Allow multiple file uploads | true |
 | fieldName | The key of field name | file[] |
+| renderLinkDest?(vditor: IVditor, node: ILuteNode, entering: boolean): [string, number] | Process the image address in the clipboard | '' |
 
 #### options.resize
 
@@ -492,6 +501,8 @@ xhr.send(JSON.stringify({url: src})); // src is the address of the image outside
 | hlCommentIds(ids: string[]) | Highlight comment by Ids |
 | unHlCommentIds(ids: string[]) | Cancel highlight comment by Ids |
 | removeCommentIds(removeIds: string[]) | Remove comment by Ids |
+| updateToolbarConfig(config: {hide?: boolean, pin?: boolean}) | Update toolbar config |
+| insertEmptyBlock(position: InsertPosition) | Insert empty block |
 
 #### static methods
 
@@ -527,6 +538,7 @@ options?: IPreviewOptions {
   cdn?: string; // Self-built CDN address
   lazyLoadImage?: string; // use "https://unpkg.com/vditor/dist/images/img-loading.svg" to lazy load image
   markdown?: options.preview.markdown;
+  render?: options.preview.render;
   renderers?: ILuteRender; // Custom rendering method https://ld246.com/article/1588412297062
 }
 ```
@@ -537,6 +549,8 @@ options?: IPreviewOptions {
 | - | - |
 | previewImage(oldImgElement: HTMLImageElement, lang: keyof II18n = "zh_CN", theme = "classic") | Click on the image to preview |
 | mermaidRender(element: HTMLElement, cdn = options.cdn, theme = options.theme) | flowchart/sequence diagram/gantt diagram rendering |
+| SMILESRender(element: HTMLElement, cdn = options.cdn, theme = options.theme) | the structure of chemical |
+| markmapRender(element: HTMLElement, cdn = options.cdn) | markdown Mind Map |
 | flowchartRender(element: HTMLElement, cdn = options.cdn) | flowchart.js rendering |
 | codeRender(element: HTMLElement, option?: IHljs) | Add a copy button for the code block in element |
 | chartRender(element: (HTMLElement\| Document) = document, cdn = options.cdn, theme = options.theme) | Chart rendering |
@@ -579,7 +593,7 @@ Due to the on-demand loading mechanism, the default CDN is [https://unpkg.com/vd
 If the code is modified or you need to use a self-built CDN, you can follow the steps below:
 
 * The initial `options` and` IPreviewOptions` need to add `cdn` configuration
-* `highlightRender`,` mathRender`, `abcRender`,` chartRender`, `mermaidRender` methods need to add cdn parameter
+* `highlightRender`, `mathRender`, `abcRender`, `chartRender`, `mermaidRender`, `SMILESRender`, `markmapRender`, `flowchartRender`, `mindmapRender`, `plantumlRender`, `graphvizRender`, `setCodeTheme`, `setContentTheme` methods need to add cdn parameter
 * Copy the dist directory in the successful build or [jsDelivr](https://www.jsdelivr.com/package/npm/vditor?path=dist) to the correct location
 
 ### Upgrade

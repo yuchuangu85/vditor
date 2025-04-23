@@ -20,8 +20,8 @@ import {
     getCursorPosition,
     getEditorRange,
     getSelectPosition,
-    setRangeByWbr,
-} from "../util/selection";
+    setRangeByWbr, setSelectionFocus,
+} from "../util/selection"
 import {clickToc, renderToc} from "../util/toc";
 import {afterRenderEvent} from "./afterRenderEvent";
 import {genImagePopover, genLinkRefPopover, highlightToolbarWYSIWYG} from "./highlightToolbarWYSIWYG";
@@ -380,6 +380,11 @@ class WYSIWYG {
                 }
             }
 
+            // https://github.com/Vanessa219/vditor/issues/729
+            if (endSpace && /^#{1,6} $/.test(blockElement.textContent)) {
+                endSpace = false;
+            }
+
             const headingElement = hasClosestByHeadings(getSelection().getRangeAt(0).startContainer);
             if (headingElement && headingElement.textContent === "") {
                 // heading 为空删除 https://github.com/Vanessa219/vditor/issues/150
@@ -412,6 +417,9 @@ class WYSIWYG {
                     checkElement.removeAttribute("checked");
                 }
                 this.preventInput = true;
+                if (getSelection().rangeCount > 0) {
+                    setSelectionFocus(getSelection().getRangeAt(0));
+                }
                 afterRenderEvent(vditor);
                 return;
             }

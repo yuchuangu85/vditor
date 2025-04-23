@@ -11,7 +11,7 @@ export const codeRender = (element: HTMLElement, option?: IHljs) => {
             e.classList.contains("language-echarts") || e.classList.contains("language-mindmap") ||
             e.classList.contains("language-plantuml") || e.classList.contains("language-markmap") ||
             e.classList.contains("language-abc") || e.classList.contains("language-graphviz") ||
-            e.classList.contains("language-math")) {
+            e.classList.contains("language-math") || e.classList.contains("language-smiles")) {
             return false;
         }
 
@@ -45,7 +45,7 @@ export const codeRender = (element: HTMLElement, option?: IHljs) => {
         divElement.innerHTML = `<span aria-label="${window.VditorI18n?.copy || "复制"}"
 onmouseover="this.setAttribute('aria-label', '${window.VditorI18n?.copy || "复制"}')"
 class="vditor-tooltipped vditor-tooltipped__w"
-onclick="this.previousElementSibling.select();document.execCommand('copy');this.setAttribute('aria-label', '${window.VditorI18n?.copied || "已复制"}')">${iconHTML}</span>`;
+onclick="event.stopPropagation();this.previousElementSibling.select();document.execCommand('copy');this.setAttribute('aria-label', '${window.VditorI18n?.copied || "已复制"}');this.previousElementSibling.blur()">${iconHTML}</span>`;
         const textarea = document.createElement("textarea");
         textarea.value = code160to32(codeText);
         divElement.insertAdjacentElement("afterbegin", textarea);

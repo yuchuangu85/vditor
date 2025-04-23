@@ -43,7 +43,7 @@
             margin-top: 0.25em;
         }
 
-        li  p {
+        li p {
             margin-top: 16px;
         }
 
@@ -231,6 +231,7 @@
         .language-mindmap,
         .language-plantuml,
         .language-mermaid,
+        .language-smiles,
         .language-markmap,
         .language-abc,
         .language-flowchart,
@@ -238,9 +239,17 @@
             margin-bottom: 16px;
         }
 
-        .language-math mjx-container:focus {
-            outline: none;
-            cursor: context-menu;
+        .language-math {
+            mjx-container:focus {
+                outline: none;
+                cursor: context-menu;
+            }
+
+            .katex-display > .katex > .katex-html > .tag {
+                display: inline-block;
+                font-size: 1.21rem;
+                right: 2px;
+            }
         }
 
         .language-echarts,
@@ -356,7 +365,7 @@
         &__rows {
             position: absolute;
             pointer-events: none;
-            top: 0.5em;
+            top: 1em;
             left: 0;
             width: 3em; /* works for line-numbers below 1000 lines */
             user-select: none;
@@ -575,6 +584,7 @@
             & > svg {
                 height: 10px;
                 width: 10px;
+                flex-shrink: 0;
             }
 
             &:hover {

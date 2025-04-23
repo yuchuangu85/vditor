@@ -114,7 +114,7 @@ Vditor 在这些方面做了努力，希望能为现代化的通用 Markdown 编
 
 * [Sym](https://github.com/88250/symphony) 一款用 Java 实现的现代化社区（论坛/BBS/社交网络/博客）平台
 * [Solo](https://github.com/88250/solo) & [Pipe](https://github.com/88250/pipe) B3log 分布式社区的博客端节点，欢迎加入下一代社区网络
-* [Tditor](https://tditor.com) 基于React、Vditor、Springboot， 一款打造极致文字创作体验的在线Markdown编辑平台
+* [Tditor](https://tditor.com) 基于React、Vditor、Springboot，一款打造极致文字创作体验的在线Markdown编辑平台
 * [Arya](https://github.com/nicejade/markdown-online-editor) 基于 Vue、Vditor，所构建的在线 Markdown 编辑器
 * [更多案例](https://github.com/Vanessa219/vditor/network/dependents?package_id=UGFja2FnZS0zMTY2Mzg4MzE%3D)
 
@@ -209,6 +209,7 @@ Markdown 输出的 HTML 所展现的外观。内置 ant-design, light，dark，w
 | esc(value: string) | <kbd>esc</kbd> 按下后触发 | - |
 | ctrlEnter(value: string) | <kbd>⌘/ctrl+enter</kbd> 按下后触发 | - |
 | select(value: string) | 编辑器中选中文字后触发 | - |
+| unSelect() | 编辑器中未选中文字后触发 | - |
 | tab | <kbd>tab</kbd> 键操作字符串，支持 `\t` 及任意字符串 | - |
 | typewriterMode | 是否启用打字机模式 | false |
 | cdn | 配置自建 CDN 地址 | `https://unpkg.com/vditor@${VDITOR_VERSION}` |
@@ -222,7 +223,7 @@ Markdown 输出的 HTML 所展现的外观。内置 ant-design, light，dark，w
 #### options.toolbar
 
 * 工具栏，可使用 name 进行简写： `toolbar: ['emoji', 'br', 'bold', '|', 'line']` 。默认值参见 [src/ts/util/Options.ts](https://github.com/Vanessa219/vditor/blob/master/src/ts/util/Options.ts)
-* name 可枚举为： `emoji` , `headings` , `bold` , `italic` , `strike` , `|` , `line` , `quote` , `list` , `ordered-list` , `check` ,`outdent` ,`indent` , `code` , `inline-code` , `insert-after` , `insert-before` ,`undo` , `redo` , `upload` , `link` , `table` , `record` , `edit-mode` , `both` , `preview` , `fullscreen` , `outline` , `code-theme` , `content-theme` , `export`, `devtools` , `info` , `help` , `br`
+* name 可枚举为： `emoji`，`headings`，`bold`，`italic`，`strike`，`|`，`line`，`quote`，`list`，`ordered-list`，`check` ,`outdent` ,`indent`，`code`，`inline-code`，`insert-after`，`insert-before` ,`undo`，`redo`，`upload`，`link`，`table`，`record`，`edit-mode`，`both`，`preview`，`fullscreen`，`outline`，`code-theme`，`content-theme`，`export`, `devtools`，`info`，`help`，`br`
 * 当 `name` 不在枚举中时，可以添加自定义按钮，格式如下：
 
 ```js
@@ -309,7 +310,7 @@ new Vditor('vditor', {
 | style | 可选值参见[Chroma](https://xyproto.github.io/splash/docs/longer/all.html) | `github` |
 | lineNumber | 是否启用行号 | false |
 | langs | 自定义指定语言 | [CODE_LANGUAGES](https://github.com/Vanessa219/vditor/blob/53ca8f9a0e511b37b5dae7c6b15eb933e9e02ccd/src/ts/constants.ts#L20) |
-| renderMenu | 渲染菜单按钮 | - |
+| renderMenu(code: HTMLElement, copy: HTMLElement) | 渲染菜单按钮 | - |
 
 #### options.preview.markdown
 
@@ -358,6 +359,12 @@ new Vditor('vditor', {
 | tooltip | 提示 | - |
 | className | 按钮类名 | - |
 | click(key: string) | 按钮点击回调事件 | - |
+
+#### options.preview.render.media
+
+|        | 说明        | 默认值  |
+|--------|-----------|------|
+| enable | 是否启用多媒体渲染 | true |
 
 #### options.image
 
@@ -418,7 +425,7 @@ xhr.send(formData);  // formData = FormData.append("file[]", File)
 }
 ```
 
-* 为了防止站外图片失效， `linkToImgUrl` 可将剪贴板中的站外图片地址传到服务器端进行保存处理，其数据结构如下：
+* 为了防止站外图片失效，`linkToImgUrl` 可将剪贴板中的站外图片地址传到服务器端进行保存处理，其数据结构如下：
 
 ```js
 // POST data
@@ -474,10 +481,12 @@ if (xhr.status === 200) {
 | handler(files: File[]) => string \| null \| Promise<string> \| Promise<null> | 自定义上传，当发生错误时返回错误信息 | - |
 | format(files: File[], responseText: string): string | 对服务端返回的数据进行转换，以满足内置的数据结构 | - |
 | file(files: File[]): File[] \| Promise<File[]> | 将上传的文件处理后再返回 | - |
+| cancel(files: File[]): void | 取消正在上传的文件 | - |
 | setHeaders(): { [key: string]: string } | 上传前使用返回值设置头 | - |
 | extraData: { [key: string]: string \| Blob } | 为 FormData 添加额外的参数 | - |
 | multiple | 上传文件是否为多个 | true |
 | fieldName | 上传字段名称 | 'file[]' |
+| renderLinkDest?(vditor: IVditor, node: ILuteNode, entering: boolean): [string, number] | 处理剪贴板中的图片地址 | '' |
 
 #### options.resize
 
@@ -539,6 +548,8 @@ if (xhr.status === 200) {
 | hlCommentIds(ids: string[]) | 高亮评论 |
 | unHlCommentIds(ids: string[]) | 取消评论高亮 |
 | removeCommentIds(removeIds: string[]) | 删除评论 |
+| updateToolbarConfig(config: {hide?: boolean, pin?: boolean}) | 更新工具栏配置 |
+| insertEmptyBlock(position: InsertPosition) | 插入空快 |
 
 #### static methods
 
@@ -575,6 +586,7 @@ options?: IPreviewOptions {
   lazyLoadImage?: string; // 设置为 Loading 图片地址后将启用图片的懒加载
   markdown?: options.preview.markdown;
   theme?: options.preview.theme;
+  render?: options.preview.render;
   renderers?: ILuteRender; // 自定义渲染 https://ld246.com/article/1588412297062
 }
 ```
@@ -585,6 +597,8 @@ options?: IPreviewOptions {
 | - | - |
 | previewImage(oldImgElement: HTMLImageElement, lang: keyof II18n = "zh_CN", theme = "classic") | 点击图片预览 |
 | mermaidRender(element: HTMLElement, cdn = options.cdn, theme = options.theme) | 流程图/时序图/甘特图 |
+| SMILESRender(element: HTMLElement, cdn = options.cdn, theme = options.theme) | 化学物质结构 |
+| markmapRender(element: HTMLElement, cdn = options.cdn) | markdown 思维导图 |
 | flowchartRender(element: HTMLElement, cdn = options.cdn) | flowchart 渲染 |
 | codeRender(element: HTMLElement, option?: IHljs) | 为 element 中的代码块添加复制按钮 |
 | chartRender(element: (HTMLElement \| Document) = document, cdn = options.cdn, theme = options.theme) | 图表渲染 |
@@ -627,7 +641,7 @@ options?: IPreviewOptions {
 如果代码有修改或需要使用自建 CDN 的话，可按以下步骤进行操作：
 
 * 初始化时，需对 `options` 及 `IPreviewOptions` 中的 `cdn`，`emojiPath`, `themes` 进行配置
-* `highlightRender` , `mathRender` , `abcRender` , `chartRender` , `mermaidRender`， `flowchartRender`，`mindmapRender`，`graphvizRender`，`setCodeTheme`，`setContentTheme` 方法中需添加 cdn 参数
+* `highlightRender`，`mathRender`，`abcRender`，`chartRender`，`mermaidRender`，`SMILESRender`，`markmapRender`，`flowchartRender`，`mindmapRender`，`plantumlRender`，`graphvizRender`，`setCodeTheme`，`setContentTheme` 方法中需添加 cdn 参数
 * 将 build 成功的 dist 目录或 [jsDelivr](https://www.jsdelivr.com/package/npm/vditor?path=dist) 中的 dist 目录拷贝至正确的位置
 
 ### 升级

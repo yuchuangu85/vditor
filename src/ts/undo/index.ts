@@ -149,6 +149,16 @@ class Undo {
         this[vditor.currentMode].lastText = text;
         vditor[vditor.currentMode].element.innerHTML = text;
         if (vditor.currentMode !== "sv") {
+            vditor[vditor.currentMode].element.querySelectorAll(`.vditor-${vditor.currentMode}__preview`)
+                .forEach((blockElement: HTMLElement) => {
+                    if (blockElement.parentElement.querySelector(".language-echarts")) {
+                        if (vditor.currentMode === "ir") {
+                            blockElement.parentElement.outerHTML = vditor.lute.SpinVditorIRDOM(blockElement.parentElement.outerHTML);
+                        } else {
+                            blockElement.parentElement.outerHTML = vditor.lute.SpinVditorDOM(blockElement.parentElement.outerHTML);
+                        }
+                    }
+                });
             vditor[vditor.currentMode].element.querySelectorAll(`.vditor-${vditor.currentMode}__preview[data-render='2']`)
                 .forEach((blockElement: HTMLElement) => {
                     processCodeRender(blockElement, vditor);
@@ -225,12 +235,12 @@ class Undo {
                 range.insertNode(wbrElement);
             }
         }
-        // 移除数学公式、echart 渲染 https://github.com/siyuan-note/siyuan/issues/537
-        const cloneElement = vditor.ir.element.cloneNode(true) as HTMLElement;
+        // 移除数学公式、echart 渲染 https://github.com/Vanessa219/vditor/issues/1738
+        const cloneElement = vditor[vditor.currentMode].element.cloneNode(true) as HTMLElement;
         cloneElement.querySelectorAll(`.vditor-${vditor.currentMode}__preview[data-render='1']`)
             .forEach((item: HTMLElement) => {
                 if (!item.firstElementChild) {
-                    return
+                    return;
                 }
                 if (item.firstElementChild.classList.contains("language-echarts") ||
                     item.firstElementChild.classList.contains("language-plantuml") ||
@@ -245,7 +255,7 @@ class Undo {
                     item.firstElementChild.removeAttribute("data-math");
                 }
             });
-        const text = vditor[vditor.currentMode].element.innerHTML;
+        const text = cloneElement.innerHTML;
         vditor[vditor.currentMode].element.querySelectorAll(".vditor-wbr").forEach((item) => {
             item.remove();
             // 使用 item.outerHTML = "" 会产生 https://github.com/Vanessa219/vditor/pull/686;

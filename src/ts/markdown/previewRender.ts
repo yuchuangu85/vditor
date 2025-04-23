@@ -1,6 +1,6 @@
 import {Constants} from "../constants";
 import {setContentTheme} from "../ui/setContentTheme";
-import {addScript, addScriptSync} from "../util/addScript";
+import {addScript} from "../util/addScript";
 import {hasClosestByClassName, hasClosestByMatchTag} from "../util/hasClosest";
 import {merge} from "../util/merge";
 import {abcRender} from "./abcRender";
@@ -14,7 +14,8 @@ import {lazyLoadImageRender} from "./lazyLoadImageRender";
 import {mathRender} from "./mathRender";
 import {mediaRender} from "./mediaRender";
 import {mermaidRender} from "./mermaidRender";
-import {markmapRender} from "../markdown/markmapRender";
+import {markmapRender} from "./markmapRender";
+import {SMILESRender} from "./SMILESRender";
 import {mindmapRender} from "./mindmapRender";
 import {plantumlRender} from "./plantumlRender";
 import {setLute} from "./setLute";
@@ -34,6 +35,11 @@ const mergeOptions = (options?: IPreviewOptions) => {
         mode: "light",
         speech: {
             enable: false,
+        },
+        render: {
+            media: {
+                enable: true,
+            }
         },
         theme: Constants.THEME_OPTIONS,
     };
@@ -126,14 +132,17 @@ export const previewRender = async (previewElement: HTMLDivElement, markdown: st
         math: mergedOptions.math,
     });
     mermaidRender(previewElement, mergedOptions.cdn, mergedOptions.mode);
-    markmapRender(previewElement, mergedOptions.cdn, mergedOptions.mode);
+    SMILESRender(previewElement, mergedOptions.cdn, mergedOptions.mode);
+    markmapRender(previewElement, mergedOptions.cdn);
     flowchartRender(previewElement, mergedOptions.cdn);
     graphvizRender(previewElement, mergedOptions.cdn);
     chartRender(previewElement, mergedOptions.cdn, mergedOptions.mode);
     mindmapRender(previewElement, mergedOptions.cdn, mergedOptions.mode);
     plantumlRender(previewElement, mergedOptions.cdn);
     abcRender(previewElement, mergedOptions.cdn);
-    mediaRender(previewElement);
+    if (mergedOptions.render.media.enable) {
+        mediaRender(previewElement);
+    }
     if (mergedOptions.speech.enable) {
         speechRender(previewElement);
     }
